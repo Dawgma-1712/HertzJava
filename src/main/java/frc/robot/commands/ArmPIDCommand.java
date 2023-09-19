@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.Arm;
 
 public class ArmPIDCommand extends CommandBase{
@@ -16,17 +18,14 @@ public class ArmPIDCommand extends CommandBase{
     public void initialize(){
 
     }
+
     public void execute(){
-        switch(stage){
-            case "coneLow":
-                arm.coneLow();
-                break;
-        }
+        arm.setPreset(stage);
     }
     public void end(boolean interrupted){
         arm.stop();
     }
     public boolean isFinished(){
-        return false;
+        return Math.abs(OperatorConstants.armPresets.get(stage) - arm.getExtendPosition()) < 3;
     }
 }

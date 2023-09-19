@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.geometry.Translation2d;
+import java.util.Map;
 
 public final class Constants {
   public static final class ModuleConstants{
@@ -47,8 +48,9 @@ public final class Constants {
     
   }
   public static final class OperatorConstants{
+    public static final Map<String, Integer> armPresets = Map.ofEntries(Map.entry("coneMid", 147), Map.entry("coneHigh", 200));
     public static final int DriveControllerPort = 0;
-    
+
     public static final int DriverYAxis = 1;
     public static final int DriverXAxis = 0;
     public static final int kDriverRotAxis = 2;

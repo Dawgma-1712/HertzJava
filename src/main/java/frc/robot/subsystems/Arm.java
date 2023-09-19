@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.OperatorConstants;
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -27,7 +30,7 @@ public class Arm extends SubsystemBase{
         raiseEncoder2 = raiseMotor2.getEncoder();
         extendEncoder = extendMotor.getEncoder();
 
-        armPID = new PIDController(0.01, 0, 0);
+        armPID = new PIDController(1, 0, 0);
     }
 
     public void periodic(){
@@ -49,7 +52,7 @@ public class Arm extends SubsystemBase{
         extendMotor.stopMotor();
     }
 
-    public void coneLow(){
-        extendMotor.set(armPID.calculate(getExtendPosition(), 0.01));
+    public void setPreset(String stage){
+        extendMotor.set(armPID.calculate(getExtendPosition(), OperatorConstants.armPresets.get(stage)));
     }
 }
