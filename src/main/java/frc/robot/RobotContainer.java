@@ -7,7 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmPIDCommand;
 import frc.robot.commands.Autos;
-import frc.robot.commands.Mode;
+import frc.robot.commands.ArmMode;
 import frc.robot.commands.SwerveJoystickCMD;
 import frc.robot.commands.SwerveZeroHeading;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -18,39 +18,35 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-
-
-
 public class RobotContainer {
   
-  public final Arm arm = new Arm();
+  private final Joystick driver = new Joystick(OperatorConstants.DriverControllerPort);
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-  public final Joystick operator = new Joystick(OperatorConstants.DriveControllerPort);
+  private final Joystick operator = new Joystick(OperatorConstants.OperatorControllerPort);
+  public final Arm arm = new Arm();
 
-
-    public RobotContainer() {
-    
+  public RobotContainer() {
+    swerveSubsystem.setDefaultCommand(new SwerveJoystickCMD(
+      swerveSubsystem,
+      () -> -driver.getRawAxis(OperatorConstants.DriverYAxis),
+      () -> driver.getRawAxis(OperatorConstants.DriverXAxis),
+      () -> driver.getRawAxis(OperatorConstants.kDriverRotAxis),
+      () -> !driver.getRawButton(OperatorConstants.DriverFieldOrientedButton)
+    ));
     configureBindings();
-    }
+  }
 
-    private void configureBindings() {
-      new JoystickButton(operator, 8).onTrue(new Mode(arm, true));
-      new JoystickButton(operator, 9).onFalse(new Mode(arm, false));
-      if(Mode.isCone){
-        new JoystickButton(operator, 3).onTrue(new ArmPIDCommand(arm, "coneMid"));
-        new JoystickButton(operator, 4).onTrue(new ArmPIDCommand(arm, "coneHigh"));
-      }else{
-        //something else
-      }
+  private void configureBindings() {
+    new JoystickButton(operator, 8).onTrue(new ArmMode(arm, true));
+    new JoystickButton(operator, 9).onFalse(new ArmMode(arm, false));
+    if(Arm.getIsCone()){
+      new JoystickButton(operator, 3).onTrue(new ArmPIDCommand(arm, "coneMid"));
+      new JoystickButton(operator, 4).onTrue(new ArmPIDCommand(arm, "coneHigh"));
+    }else{
+      //something else
     }
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+  }
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
     return null;
   }
 }

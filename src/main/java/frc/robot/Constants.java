@@ -48,8 +48,24 @@ public final class Constants {
     
   }
   public static final class OperatorConstants{
-    public static final Map<String, Integer> armPresets = Map.ofEntries(Map.entry("coneMid", 147), Map.entry("coneHigh", 200));
-    public static final int DriveControllerPort = 0;
+    public static final Map<String, Integer> armExtendPresets = Map.ofEntries(
+      Map.entry("coneMid", 147), 
+      Map.entry("coneHigh", 200),
+      Map.entry("cubeMid", 1),
+      Map.entry("cubeHigh", 1),
+      Map.entry("stow", 1),
+      Map.entry("hybrid", 1),
+      Map.entry("ground", 1));
+    public static final Map<String, Integer> armRaisePosition = Map.ofEntries(
+      Map.entry("coneMid", 1),
+      Map.entry("coneHigh", 200),
+      Map.entry("cubeMid", 1),
+      Map.entry("cubeHigh", 1),
+      Map.entry("stow", 1),
+      Map.entry("hybrid", 1),
+      Map.entry("ground", 1));
+    public static final int OperatorControllerPort = 0;
+    public static final int DriverControllerPort = 1;
 
     public static final int DriverYAxis = 1;
     public static final int DriverXAxis = 0;

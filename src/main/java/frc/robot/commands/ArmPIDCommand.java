@@ -26,6 +26,37 @@ public class ArmPIDCommand extends CommandBase{
         arm.stop();
     }
     public boolean isFinished(){
-        return Math.abs(OperatorConstants.armPresets.get(stage) - arm.getExtendPosition()) < 3;
+        if(stage.equals("high") || stage.equals("mid")){
+            if(arm.getIsCone()){
+                switch(stage){
+                    case "high":
+                        return Math.abs(OperatorConstants.armExtendPresets.get("coneHigh") - arm.getExtendPosition()) < 3 && 
+                                Math.abs(OperatorConstants.armRaisePresets.get("coneHigh") - arm.getRaise1Position()) < 3 && 
+                                Math.abs(OperatorConstants.armRaisePresets.get("coneHigh") - Math.abs(arm.getRaise2Position())) < 3;
+                    case "low":
+                        return Math.abs(OperatorConstants.armExtendPresets.get("coneMid") - arm.getExtendPosition()) < 3 && 
+                                Math.abs(OperatorConstants.armRaisePresets.get("coneMid") - arm.getRaise1Position()) < 3 && 
+                                Math.abs(OperatorConstants.armRaisePresets.get("coneMid") - Math.abs(arm.getRaise2Position())) < 3;
+                }
+            }
+            else{
+                switch(stage){
+                    case "high":
+                        return Math.abs(OperatorConstants.armExtendPresets.get("cubeHigh") - arm.getExtendPosition()) < 3 && 
+                                Math.abs(OperatorConstants.armRaisePresets.get("cubeHigh") - arm.getRaise1Position()) < 3 && 
+                                Math.abs(OperatorConstants.armRaisePresets.get("cubeHigh") - Math.abs(arm.getRaise2Position())) < 3;
+                    case "low":
+                        return Math.abs(OperatorConstants.armExtendPresets.get("cubeMid") - arm.getExtendPosition()) < 3 && 
+                                Math.abs(OperatorConstants.armRaisePresets.get("cubeMid") - arm.getRaise1Position()) < 3 && 
+                                Math.abs(OperatorConstants.armRaisePresets.get("cubeMid") - Math.abs(arm.getRaise2Position())) < 3;
+                }
+            }
+        }
+        else{
+            return Math.abs(OperatorConstants.armExtendPresets.get(stage) - arm.getExtendPosition()) < 3 && 
+            Math.abs(OperatorConstants.armRaisePresets.get(stage) - arm.getRaise1Position()) < 3 && 
+            Math.abs(OperatorConstants.armRaisePresets.get(stage) - Math.abs(arm.getRaise2Position())) < 3;
+        }
+        return false;
     }
 }
