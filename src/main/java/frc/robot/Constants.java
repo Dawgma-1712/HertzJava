@@ -48,22 +48,22 @@ public final class Constants {
     
   }
   public static final class OperatorConstants{
-    public static final Map<String, Integer> armExtendPresets = Map.ofEntries(
-      Map.entry("coneMid", 147), 
-      Map.entry("coneHigh", 200),
-      Map.entry("cubeMid", 1),
-      Map.entry("cubeHigh", 1),
-      Map.entry("stow", 1),
-      Map.entry("hybrid", 1),
-      Map.entry("ground", 1));
-    public static final Map<String, Integer> armRaisePosition = Map.ofEntries(
-      Map.entry("coneMid", 1),
-      Map.entry("coneHigh", 200),
-      Map.entry("cubeMid", 1),
-      Map.entry("cubeHigh", 1),
-      Map.entry("stow", 1),
-      Map.entry("hybrid", 1),
-      Map.entry("ground", 1));
+    public static final Map<String, Double> armExtendPresets = Map.ofEntries(
+      Map.entry("coneMid", 147.0),
+      Map.entry("coneHigh", 200.0),
+      Map.entry("cubeMid", 79.0),
+      Map.entry("cubeHigh", 200.0),
+      Map.entry("stow", 0.0),
+      Map.entry("substation", 120.0),
+      Map.entry("ground", 0.0));
+    public static final Map<String, Double> armRaisePresets = Map.ofEntries(
+      Map.entry("coneMid", -16.8),
+      Map.entry("coneHigh", -16.0),
+      Map.entry("cubeMid", -18.0),
+      Map.entry("cubeHigh", -17.0),
+      Map.entry("stow", 0.0),
+      Map.entry("substation", -16.2),
+      Map.entry("ground", -28.5));
     public static final int OperatorControllerPort = 0;
     public static final int DriverControllerPort = 1;
 

@@ -5,8 +5,8 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.SPI;
+//import edu.wpi.first.wpilibj.I2C;
+//import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj.SerialPort;
@@ -18,19 +18,19 @@ public class SwerveSubsystem extends SubsystemBase{
         DriveConstants.frontLeftTurningMotorPort,
         false, 
         false,
-        DriveConstants.frontLeftAbsoluteEncoder, 0.17, 0, 0);
+        DriveConstants.frontLeftAbsoluteEncoder, 1, 0, 0);
     private final SwerveModule frontRight = new SwerveModule(
         DriveConstants.frontRightDriveMotorPort,
         DriveConstants.frontRightTurningMotorPort,
         false,
         false,
-        DriveConstants.frontRightAbsoluteEncoder, 0.17, 0, 0);
+        DriveConstants.frontRightAbsoluteEncoder, 1, 0, 0);
     private final SwerveModule backLeft = new SwerveModule(
         DriveConstants.backLeftDriveMotorPort,
         DriveConstants.backLeftTurningMotorPort,
         false,
         false,
-        DriveConstants.backLeftAbsoluteEncoder, 0.17, 0, 0);
+        DriveConstants.backLeftAbsoluteEncoder, 1, 0, 0);
     private final SwerveModule backRight = new SwerveModule(
         DriveConstants.backRightDriveMotorPort,
         DriveConstants.backRightTurningMotorPort,

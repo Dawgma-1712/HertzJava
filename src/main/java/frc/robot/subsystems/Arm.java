@@ -29,15 +29,17 @@ public class Arm extends SubsystemBase{
         this.raiseMotor2 = new CANSparkMax(14, MotorType.kBrushless);
         this.extendMotor = new CANSparkMax(15, MotorType.kBrushless);
 
+        raiseMotor2.setInverted(true);
+
         raiseEncoder1 = raiseMotor1.getEncoder();
         raiseEncoder2 = raiseMotor2.getEncoder();
         extendEncoder = extendMotor.getEncoder();
 
         isCone = false;//Change if initial mode is different
 
-        armExtendPID = new PIDController(1, 0, 0);
-        armRaisePID1 = new PIDController(1, 0, 0);
-        armRaisePID2 = new PIDController(1, 0, 0);
+        armExtendPID = new PIDController(0.44891030029999945400000000000, 0, 0);
+        armRaisePID1 = new PIDController(0.140600000000000, 0, 0);
+        armRaisePID2 = new PIDController(0.140600000000000, 0, 0);
     }
 
     public void periodic(){
@@ -66,39 +68,14 @@ public class Arm extends SubsystemBase{
     }
 
     public void setPreset(String stage){
-        if(stage.equals("mid") || stage.equals("high")){
-            if(isCone){
-                switch(stage){
-                    case "mid":
-                        extendMotor.set(armExtendPID.calculate(getExtendPosition(), OperatorConstants.armExtendPresets.get("coneMid")));
-                        raiseMotor1.set(armRaisePID1.calculate(getRaise1Position(), OperatorConstants.armRaisePresets.get("coneMid")));
-                        raiseMotor2.set(-armRaisePID1.calculate(getRaise1Position(), OperatorConstants.armRaisePresets.get("coneMid")));
-                        break;
-                    case "high":
-                        extendMotor.set(armExtendPID.calculate(getExtendPosition(), OperatorConstants.armExtendPresets.get("coneHigh")));
-                        raiseMotor1.set(armRaisePID1.calculate(getRaise1Position(), OperatorConstants.armRaisePresets.get("coneHigh")));
-                        raiseMotor2.set(-armRaisePID1.calculate(getRaise1Position(), OperatorConstants.armRaisePresets.get("coneHigh")));
-                        break;
-                }
-            }
-            else{
-                switch(stage){
-                    case "mid":
-                        extendMotor.set(armExtendPID.calculate(getExtendPosition(), OperatorConstants.armExtendPresets.get("cubeMid")));
-                        raiseMotor1.set(armRaisePID1.calculate(getRaise1Position(), OperatorConstants.armRaisePresets.get("cubeMid")));
-                        raiseMotor2.set(-armRaisePID1.calculate(getRaise1Position(), OperatorConstants.armRaisePresets.get("cubeMid")));
-                        break;
-                    case "high":
-                        extendMotor.set(armExtendPID.calculate(getExtendPosition(), OperatorConstants.armExtendPresets.get("cubeHigh")));
-                        raiseMotor1.set(armRaisePID1.calculate(getRaise1Position(), OperatorConstants.armRaisePresets.get("cubeHigh")));
-                        raiseMotor2.set(-armRaisePID1.calculate(getRaise1Position(), OperatorConstants.armRaisePresets.get("cubeHigh")));
-                }
-            }
-        }
-        else{
+        new Thread(() -> {
             extendMotor.set(armExtendPID.calculate(getExtendPosition(), OperatorConstants.armExtendPresets.get(stage)));
+        }).start();
+        new Thread(() -> {
             raiseMotor1.set(armRaisePID1.calculate(getRaise1Position(), OperatorConstants.armRaisePresets.get(stage)));
-            raiseMotor2.set(-armRaisePID1.calculate(getRaise1Position(), OperatorConstants.armRaisePresets.get(stage)));
-        }
+        }).start();
+        new Thread(() -> {
+            raiseMotor2.set(armRaisePID2.calculate(getRaise2Position(), OperatorConstants.armRaisePresets.get(stage)));
+        }).start();
     }
 }

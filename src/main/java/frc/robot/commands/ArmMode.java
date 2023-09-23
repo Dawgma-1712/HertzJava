@@ -5,7 +5,7 @@ import frc.robot.subsystems.*;
 
 public class ArmMode extends CommandBase{
     private final Arm arm;
-    private final boolean isCone;
+    private boolean isCone;
 
     public ArmMode(Arm arm, boolean isCone){
         this.arm = arm;

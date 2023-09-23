@@ -6,7 +6,6 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmPIDCommand;
-import frc.robot.commands.Autos;
 import frc.robot.commands.ArmMode;
 import frc.robot.commands.SwerveJoystickCMD;
 import frc.robot.commands.SwerveZeroHeading;
@@ -14,9 +13,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Arm;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
   
@@ -37,14 +34,25 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    new JoystickButton(operator, 8).onTrue(new ArmMode(arm, true));
-    new JoystickButton(operator, 9).onFalse(new ArmMode(arm, false));
-    if(Arm.getIsCone()){
-      new JoystickButton(operator, 3).onTrue(new ArmPIDCommand(arm, "coneMid"));
-      new JoystickButton(operator, 4).onTrue(new ArmPIDCommand(arm, "coneHigh"));
-    }else{
-      //something else
+    //Swerve controls
+    new JoystickButton(driver, 1).onTrue(new SwerveZeroHeading(swerveSubsystem));
+
+    //Arm controls
+    new JoystickButton(operator, 5).onTrue(new ArmMode(arm, !arm.getIsCone()));
+
+    if(arm.getIsCone()){
+      new JoystickButton(operator, 0).onTrue(new ArmPIDCommand(arm, "coneMid"));
+      new JoystickButton(operator, 3).onTrue(new ArmPIDCommand(arm, "coneHigh"));
     }
+    else{
+      new JoystickButton(operator, 0).onTrue(new ArmPIDCommand(arm, "cubeMid"));
+      new JoystickButton(operator, 3).onTrue(new ArmPIDCommand(arm, "cubeHigh"));
+    }
+    new JoystickButton(operator, 2).onTrue(new ArmPIDCommand(arm, "stow"));
+    new JoystickButton(operator, 1).onTrue(new ArmPIDCommand(arm, "ground"));
+    new JoystickButton(operator, 6).onTrue(new ArmPIDCommand(arm, "substation"));
+    //Claw button is 4
+
   }
   public Command getAutonomousCommand() {
     return null;
