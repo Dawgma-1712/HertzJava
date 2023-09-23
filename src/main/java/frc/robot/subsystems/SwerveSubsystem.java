@@ -36,7 +36,7 @@ public class SwerveSubsystem extends SubsystemBase{
         DriveConstants.backRightTurningMotorPort,
         false,
         false,
-        DriveConstants.backLeftAbsoluteEncoder, 0.13, 0, 0);
+        DriveConstants.backLeftAbsoluteEncoder, 1, 0, 0);
 
     private AHRS gyro = new AHRS(SerialPort.Port.kUSB1);
 
