@@ -11,40 +11,24 @@ import com.revrobotics.CANSparkMax;
 
 public class Arm extends SubsystemBase{
 
-    private final CANSparkMax raiseMotor1;
-    private final CANSparkMax raiseMotor2;
-    private final CANSparkMax extendMotor;
+    private final CANSparkMax raiseMotor1 = new CANSparkMax(13, MotorType.kBrushless);
+    private final CANSparkMax raiseMotor2 = new CANSparkMax(14, MotorType.kBrushless);
+    private final CANSparkMax extendMotor = new CANSparkMax(15, MotorType.kBrushless);
 
-    private final RelativeEncoder raiseEncoder1;
-    private final RelativeEncoder raiseEncoder2;
-    private final RelativeEncoder extendEncoder;
+    private final RelativeEncoder raiseEncoder1 = raiseMotor1.getEncoder();
+    private final RelativeEncoder raiseEncoder2 = raiseMotor2.getEncoder();
+    private final RelativeEncoder extendEncoder = extendMotor.getEncoder();
 
-    private boolean isCone;
+    private boolean isCone = false;//Change if initial mode is different
 
-    private final PIDController armExtendPID;
-    private final PIDController armRaisePID1;
-    private final PIDController armRaisePID2;
+    private final PIDController armExtendPID = new PIDController(0.44891030029999945400000000000, 0, 0);
+    private final PIDController armRaisePID1 = new PIDController(0.140600000000000, 0, 0);
+    private final PIDController armRaisePID2 = new PIDController(0.140600000000000, 0, 0);
 
-    private final Spark LED;
+    private final Spark LED = new Spark(0);
 
     public Arm(){
-        this.raiseMotor1 = new CANSparkMax(13, MotorType.kBrushless);
-        this.raiseMotor2 = new CANSparkMax(14, MotorType.kBrushless);
-        this.extendMotor = new CANSparkMax(15, MotorType.kBrushless);
-
         raiseMotor2.setInverted(true);
-
-        raiseEncoder1 = raiseMotor1.getEncoder();
-        raiseEncoder2 = raiseMotor2.getEncoder();
-        extendEncoder = extendMotor.getEncoder();
-
-        isCone = false;//Change if initial mode is different
-
-        armExtendPID = new PIDController(0.44891030029999945400000000000, 0, 0);
-        armRaisePID1 = new PIDController(0.140600000000000, 0, 0);
-        armRaisePID2 = new PIDController(0.140600000000000, 0, 0);
-        
-        LED = new Spark(0);
     }
 
     public void periodic(){

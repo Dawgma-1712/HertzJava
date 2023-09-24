@@ -49,6 +49,19 @@ public class SwerveSubsystem extends SubsystemBase{
         }).start();
     }
 
+    public SwerveModule getFL(){
+        return frontLeft;
+    }
+    public SwerveModule getFR(){
+        return frontRight;
+    }
+    public SwerveModule getBL(){
+        return backLeft;
+    }
+    public SwerveModule getBR(){
+        return backRight;
+    }
+
     public void zeroHeading(){
         gyro.reset();
     }
