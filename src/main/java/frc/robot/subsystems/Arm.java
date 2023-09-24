@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 
@@ -24,6 +25,8 @@ public class Arm extends SubsystemBase{
     private final PIDController armRaisePID1;
     private final PIDController armRaisePID2;
 
+    private final Spark LED;
+
     public Arm(){
         this.raiseMotor1 = new CANSparkMax(13, MotorType.kBrushless);
         this.raiseMotor2 = new CANSparkMax(14, MotorType.kBrushless);
@@ -40,6 +43,8 @@ public class Arm extends SubsystemBase{
         armExtendPID = new PIDController(0.44891030029999945400000000000, 0, 0);
         armRaisePID1 = new PIDController(0.140600000000000, 0, 0);
         armRaisePID2 = new PIDController(0.140600000000000, 0, 0);
+        
+        LED = new Spark(0);
     }
 
     public void periodic(){
@@ -68,6 +73,12 @@ public class Arm extends SubsystemBase{
     }
 
     public void setPreset(String stage){
+        if(isCone){
+            LED.set(0.69);
+        }
+        if(!isCone){
+            LED.set(0.91);
+        }
         new Thread(() -> {
             extendMotor.set(armExtendPID.calculate(getExtendPosition(), OperatorConstants.armExtendPresets.get(stage)));
         }).start();
