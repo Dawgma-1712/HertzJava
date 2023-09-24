@@ -7,10 +7,12 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmPIDCommand;
 import frc.robot.commands.ArmMode;
+import frc.robot.commands.ClawCMD;
 import frc.robot.commands.SwerveJoystickCMD;
 import frc.robot.commands.SwerveZeroHeading;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Claw;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -20,7 +22,8 @@ public class RobotContainer {
   private final Joystick driver = new Joystick(OperatorConstants.DriverControllerPort);
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final Joystick operator = new Joystick(OperatorConstants.OperatorControllerPort);
-  public final Arm arm = new Arm();
+  private final Arm arm = new Arm();
+  private final Claw claw = new Claw();
 
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCMD(
@@ -51,8 +54,9 @@ public class RobotContainer {
     new JoystickButton(operator, 2).onTrue(new ArmPIDCommand(arm, "stow"));
     new JoystickButton(operator, 1).onTrue(new ArmPIDCommand(arm, "ground"));
     new JoystickButton(operator, 6).onTrue(new ArmPIDCommand(arm, "substation"));
-    //Claw button is 4
 
+    //Claw controls
+    new JoystickButton(operator, 4).onTrue(new ClawCMD(claw, !claw.getIsOpen()));
   }
   public Command getAutonomousCommand() {
     return null;
