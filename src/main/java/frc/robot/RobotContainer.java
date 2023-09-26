@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmPIDCommand;
+import frc.robot.commands.ArmJoystickCommand;
 import frc.robot.commands.ArmMode;
 import frc.robot.commands.ClawCMD;
 import frc.robot.commands.SwerveJoystickCMD;
@@ -33,7 +34,13 @@ public class RobotContainer {
       () -> driver.getRawAxis(OperatorConstants.kDriverRotAxis),
       () -> !driver.getRawButton(OperatorConstants.DriverFieldOrientedButton)
     ));
-    configureBindings();
+
+    arm.setDefaultCommand(new ArmJoystickCommand(
+      arm,
+      () -> -operator.getRawAxis(OperatorConstants.OperatorExtend), 
+      () -> operator.getRawAxis(OperatorConstants.OperatorRaise)
+      )); 
+    configureBindings(); 
   }
 
   private void configureBindings() {
@@ -41,19 +48,19 @@ public class RobotContainer {
     new JoystickButton(driver, 1).onTrue(new SwerveZeroHeading(swerveSubsystem));
 
     //Arm controls
-    new JoystickButton(operator, 5).onTrue(new ArmMode(arm, !arm.getIsCone()));
+    new JoystickButton(operator, 6).onTrue(new ArmMode(arm, !arm.getIsCone()));
 
     if(arm.getIsCone()){
-      new JoystickButton(operator, 0).onTrue(new ArmPIDCommand(arm, "coneMid"));
-      new JoystickButton(operator, 3).onTrue(new ArmPIDCommand(arm, "coneHigh"));
+      new JoystickButton(operator, 1).onTrue(new ArmPIDCommand(arm, "coneMid"));
+      new JoystickButton(operator, 4).onTrue(new ArmPIDCommand(arm, "coneHigh"));
     }
     else{
-      new JoystickButton(operator, 0).onTrue(new ArmPIDCommand(arm, "cubeMid"));
-      new JoystickButton(operator, 3).onTrue(new ArmPIDCommand(arm, "cubeHigh"));
+      new JoystickButton(operator, 1).onTrue(new ArmPIDCommand(arm, "cubeMid"));
+      new JoystickButton(operator, 4).onTrue(new ArmPIDCommand(arm, "cubeHigh"));
     }
-    new JoystickButton(operator, 2).onTrue(new ArmPIDCommand(arm, "stow"));
-    new JoystickButton(operator, 1).onTrue(new ArmPIDCommand(arm, "ground"));
-    new JoystickButton(operator, 6).onTrue(new ArmPIDCommand(arm, "substation"));
+    new JoystickButton(operator, 3).onTrue(new ArmPIDCommand(arm, "stow"));
+    new JoystickButton(operator, 2).onTrue(new ArmPIDCommand(arm, "ground"));
+    new JoystickButton(operator, 7).onTrue(new ArmPIDCommand(arm, "substation"));
 
     //Claw controls
     new JoystickButton(operator, 4).onTrue(new ClawCMD(claw, !claw.getIsOpen()));

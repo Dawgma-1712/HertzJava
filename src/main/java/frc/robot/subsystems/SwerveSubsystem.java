@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 //import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.SwerveJoystickCMD;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -18,25 +19,25 @@ public class SwerveSubsystem extends SubsystemBase{
         DriveConstants.frontLeftTurningMotorPort,
         false, 
         false,
-        DriveConstants.frontLeftAbsoluteEncoder, 1, 0, 0);
+        DriveConstants.frontLeftAbsoluteEncoder, 0.7, 0, 0);
     private final SwerveModule frontRight = new SwerveModule(
         DriveConstants.frontRightDriveMotorPort,
         DriveConstants.frontRightTurningMotorPort,
         false,
         false,
-        DriveConstants.frontRightAbsoluteEncoder, 1, 0, 0);
+        DriveConstants.frontRightAbsoluteEncoder, 0.7, 0, 0);
     private final SwerveModule backLeft = new SwerveModule(
         DriveConstants.backLeftDriveMotorPort,
         DriveConstants.backLeftTurningMotorPort,
         false,
         false,
-        DriveConstants.backLeftAbsoluteEncoder, 1, 0, 0);
+        DriveConstants.backLeftAbsoluteEncoder, 0.7, 0, 0);
     private final SwerveModule backRight = new SwerveModule(
         DriveConstants.backRightDriveMotorPort,
         DriveConstants.backRightTurningMotorPort,
         false,
         false,
-        DriveConstants.backLeftAbsoluteEncoder, 1, 0, 0);
+        DriveConstants.backLeftAbsoluteEncoder, 0.7, 0, 0);
 
     private AHRS gyro = new AHRS(SerialPort.Port.kUSB1);
 

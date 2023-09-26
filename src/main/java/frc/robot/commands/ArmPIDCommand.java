@@ -24,11 +24,11 @@ public class ArmPIDCommand extends CommandBase{
         arm.setPreset(stage);
     }
     public void end(boolean interrupted){
-        arm.stop();
+        //arm.setIdle();
     }
     public boolean isFinished(){
-        return Math.abs(OperatorConstants.armExtendPresets.get(stage) - arm.getExtendPosition()) < 3 && 
-                Math.abs(OperatorConstants.armRaisePresets.get(stage) - arm.getRaise1Position()) < 3 && 
-                Math.abs(OperatorConstants.armRaisePresets.get(stage) - arm.getRaise2Position()) < 3;
+        return Math.abs(OperatorConstants.armExtendPresets.get(stage) - arm.getExtendPosition()) < 1 && 
+                Math.abs(OperatorConstants.armRaisePresets.get(stage) - arm.getRaise1Position()) < 1 && 
+                Math.abs(OperatorConstants.armRaisePresets.get(stage) - arm.getRaise2Position()) < 1;
     }
 }

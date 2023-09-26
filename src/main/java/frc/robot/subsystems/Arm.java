@@ -21,9 +21,9 @@ public class Arm extends SubsystemBase{
 
     private boolean isCone = false;//Change if initial mode is different
 
-    private final PIDController armExtendPID = new PIDController(0.44891030029999945400000000000, 0, 0);
-    private final PIDController armRaisePID1 = new PIDController(0.140600000000000, 0, 0);
-    private final PIDController armRaisePID2 = new PIDController(0.140600000000000, 0, 0);
+    private final PIDController armExtendPID = new PIDController(0.27891030029999945400000000000, 0, 0);
+    private final PIDController armRaisePID1 = new PIDController(0.030600000000000, 0, 0);
+    private final PIDController armRaisePID2 = new PIDController(0.030600000000000, 0, 0);
 
     private final Spark LED = new Spark(0);
 
@@ -56,6 +56,12 @@ public class Arm extends SubsystemBase{
         extendMotor.stopMotor();
     }
 
+    public void setIdle(){
+        extendMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        raiseMotor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        raiseMotor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    }
+
     public void setPreset(String stage){
         if(isCone){
             LED.set(0.69);
@@ -72,5 +78,11 @@ public class Arm extends SubsystemBase{
         new Thread(() -> {
             raiseMotor2.set(armRaisePID2.calculate(getRaise2Position(), OperatorConstants.armRaisePresets.get(stage)));
         }).start();
+    }
+
+    public void manualArm(double extend, double raise) {
+        extendMotor.set(extend);
+        raiseMotor1.set(raise/10);
+        raiseMotor2.set(raise/10);
     }
 }
