@@ -19,20 +19,28 @@ public class SwervePivotCMD extends CommandBase {
   @Override
   public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double angle = Math.atan2(xFunction.get(), yFunction.get());
-    if(swerveSubsystem.getHeading() <= angle + Math.PI/2.0){
-
+    double heading = swerveSubsystem.getHeading() * Math.PI/180.0;
+    if(heading < angle + Math.PI/2.0){
+      //Spin according to FL
     }
+    else if(heading < angle + Math.PI){
+      //Spin according to FR
+    }
+    else if(heading < angle + 3 * Math.PI / 2.0){
+      //Spin according to BR
+    }
+    else{
+      //Spin according to BL
+    }
+    
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

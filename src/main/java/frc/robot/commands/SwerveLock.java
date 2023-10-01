@@ -33,7 +33,7 @@ public class SwerveLock extends CommandBase {
   public void end(boolean interrupted) {
     swerveSubsystem.stopModules();
   }
-  
+
   @Override
   public boolean isFinished() {
     return Math.abs(swerveSubsystem.getFL().getTurnPosition() - states[0].angle.getRadians()) < 3 && 

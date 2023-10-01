@@ -4,6 +4,8 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 //import edu.wpi.first.wpilibj.I2C;
 //import edu.wpi.first.wpilibj.SPI;
@@ -39,6 +41,8 @@ public class SwerveSubsystem extends SubsystemBase{
         DriveConstants.backLeftAbsoluteEncoder, 1, 0, 0);
 
     private AHRS gyro = new AHRS(SerialPort.Port.kUSB1);
+    private SwerveModulePosition[] positions = {new SwerveModulePosition(), new SwerveModulePosition(), new SwerveModulePosition(), new SwerveModulePosition()};
+    private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, new Rotation2d(0), positions);
 
     public SwerveSubsystem(){
         new Thread(() -> {
@@ -73,8 +77,13 @@ public class SwerveSubsystem extends SubsystemBase{
     }
 
     public void periodic(){
+        positions = {
+            new SwerveModulePosition(frontLeft.getDrivePosition(), new Rotation2d(frontLeft.getTurnPosition())), 
+            new SwerveModulePosition(frontRight.getDrivePosition(), new Rotation2d(frontRight.getTurnPosition())), 
+            new SwerveModulePosition(backLeft.getDrivePosition(), new Rotation2d(backLeft.getTurnPosition())), 
+            new SwerveModulePosition(backRight.getDrivePosition(), new Rotation2d(backRight.getTurnPosition()))};
+        odometer.update(getRotation2d(), new SwerveModulePosition())
         SmartDashboard.putNumber("Robot Heading", getHeading());
-        
     }
 
     public void stopModules(){
