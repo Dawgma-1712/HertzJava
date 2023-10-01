@@ -57,15 +57,17 @@ public final class Constants {
       Map.entry("substation", 120.0),
       Map.entry("ground", 0.0));
     public static final Map<String, Double> armRaisePresets = Map.ofEntries(
-      Map.entry("coneMid", -16.8),
-      Map.entry("coneHigh", -16.0),
-      Map.entry("cubeMid", -18.0),
-      Map.entry("cubeHigh", -17.0),
+      Map.entry("coneMid", 16.8),
+      Map.entry("coneHigh", 16.0),
+      Map.entry("cubeMid", 18.0),
+      Map.entry("cubeHigh", 17.0),
       Map.entry("stow", 0.0),
-      Map.entry("substation", -16.2),
-      Map.entry("ground", -28.5));
+      Map.entry("substation", 16.2),
+      Map.entry("ground", 28.5));
     public static final int OperatorControllerPort = 0;
     public static final int DriverControllerPort = 1;
+    public static final int OperatorRaise = 5;
+    public static final int OperatorExtend = 1;
 
     public static final int DriverYAxis = 1;
     public static final int DriverXAxis = 0;
