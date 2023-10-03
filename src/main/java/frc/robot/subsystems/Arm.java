@@ -22,8 +22,8 @@ public class Arm extends SubsystemBase{
     private boolean isCone = false;//Change if initial mode is different
 
     private final PIDController armExtendPID = new PIDController(0.27891030029999945400000000000, 0, 0);
-    private final PIDController armRaisePID1 = new PIDController(0.030600000000000, 0, 0);
-    private final PIDController armRaisePID2 = new PIDController(0.030600000000000, 0, 0);
+    private final PIDController armRaisePID1 = new PIDController(0.020600000000000, 0, 0);
+    private final PIDController armRaisePID2 = new PIDController(0.020600000000000, 0, 0);
 
     private final Spark LED = new Spark(0);
 
@@ -57,6 +57,7 @@ public class Arm extends SubsystemBase{
     }
 
     public void setIdle(){
+        System.out.println("Set idle");
         extendMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         raiseMotor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
         raiseMotor2.setIdleMode(CANSparkMax.IdleMode.kBrake);

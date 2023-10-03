@@ -22,11 +22,14 @@ public class ArmPIDCommand extends CommandBase{
 
     public void execute(){
         arm.setPreset(stage);
+        System.out.println("on");
     }
     public void end(boolean interrupted){
-        //arm.setIdle();
+        arm.setIdle();
     }
     public boolean isFinished(){
+        //return false;
+        System.out.println("Ended");
         return Math.abs(OperatorConstants.armExtendPresets.get(stage) - arm.getExtendPosition()) < 1 && 
                 Math.abs(OperatorConstants.armRaisePresets.get(stage) - arm.getRaise1Position()) < 1 && 
                 Math.abs(OperatorConstants.armRaisePresets.get(stage) - arm.getRaise2Position()) < 1;

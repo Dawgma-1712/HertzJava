@@ -48,22 +48,22 @@ public class RobotContainer {
     new JoystickButton(driver, 1).onTrue(new SwerveZeroHeading(swerveSubsystem));
 
     //Arm controls
-    new JoystickButton(operator, 6).onTrue(new ArmMode(arm, !arm.getIsCone()));
+    new JoystickButton(operator, 6).onTrue(new ArmMode(arm, !arm.getIsCone()));//RB
 
     if(arm.getIsCone()){
-      new JoystickButton(operator, 1).onTrue(new ArmPIDCommand(arm, "coneMid"));
-      new JoystickButton(operator, 4).onTrue(new ArmPIDCommand(arm, "coneHigh"));
+      new JoystickButton(operator, 1).onTrue(new ArmPIDCommand(arm, "coneMid"));//Button A
+      new JoystickButton(operator, 4).onTrue(new ArmPIDCommand(arm, "coneHigh"));//Button Y
     }
     else{
       new JoystickButton(operator, 1).onTrue(new ArmPIDCommand(arm, "cubeMid"));
       new JoystickButton(operator, 4).onTrue(new ArmPIDCommand(arm, "cubeHigh"));
     }
-    new JoystickButton(operator, 3).onTrue(new ArmPIDCommand(arm, "stow"));
-    new JoystickButton(operator, 2).onTrue(new ArmPIDCommand(arm, "ground"));
-    new JoystickButton(operator, 7).onTrue(new ArmPIDCommand(arm, "substation"));
+    new JoystickButton(operator, 3).onTrue(new ArmPIDCommand(arm, "stow"));//Button X
+    new JoystickButton(operator, 2).onTrue(new ArmPIDCommand(arm, "ground"));//Button B
+    new JoystickButton(operator, 7).onTrue(new ArmPIDCommand(arm, "substation"));//Button Back
 
     //Claw controls
-    new JoystickButton(operator, 4).onTrue(new ClawCMD(claw, !claw.getIsOpen()));
+    new JoystickButton(operator, 5).onTrue(new ClawCMD(claw, !claw.getIsOpen()));//Button LB
   }
   public Command getAutonomousCommand() {
     return null;
