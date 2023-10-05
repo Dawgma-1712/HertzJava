@@ -22,8 +22,8 @@ public class Arm extends SubsystemBase{
     private boolean isCone = false;//Change if initial mode is different
 
     private final PIDController armExtendPID = new PIDController(0.27891030029999945400000000000, 0, 0);
-    private final PIDController armRaisePID1 = new PIDController(0.020600000000000, 0, 0);
-    private final PIDController armRaisePID2 = new PIDController(0.020600000000000, 0, 0);
+    private final PIDController armRaisePID1 = new PIDController(0.028600000000000, 0.005, 0.008);
+    private final PIDController armRaisePID2 = new PIDController(0.028600000000000, 0.005, 0.008);
 
     private final Spark LED = new Spark(0);
 
@@ -72,6 +72,7 @@ public class Arm extends SubsystemBase{
         }
         new Thread(() -> {
             extendMotor.set(armExtendPID.calculate(getExtendPosition(), OperatorConstants.armExtendPresets.get(stage)));
+            System.out.println(armExtendPID.calculate(getExtendPosition(), OperatorConstants.armExtendPresets.get(stage)));
         }).start();
         new Thread(() -> {
             raiseMotor1.set(armRaisePID1.calculate(getRaise1Position(), OperatorConstants.armRaisePresets.get(stage)));
@@ -79,6 +80,13 @@ public class Arm extends SubsystemBase{
         new Thread(() -> {
             raiseMotor2.set(armRaisePID2.calculate(getRaise2Position(), OperatorConstants.armRaisePresets.get(stage)));
         }).start();
+    }
+
+    public void manualArm2(double extend, double raise){
+        //raise = raise < 0 ? raise : 1.5*raise;
+        extendMotor.set(armExtendPID.calculate(getExtendPosition(), getExtendPosition() + 1.5*extend));
+        raiseMotor1.set(armRaisePID1.calculate(getRaise1Position(), getRaise1Position()));
+        raiseMotor2.set(armRaisePID2.calculate(getRaise2Position(), getRaise2Position()));
     }
 
     public void manualArm(double extend, double raise) {

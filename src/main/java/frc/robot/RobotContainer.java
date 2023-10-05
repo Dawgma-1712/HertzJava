@@ -39,7 +39,7 @@ public class RobotContainer {
       arm,
       () -> -operator.getRawAxis(OperatorConstants.OperatorExtend), 
       () -> operator.getRawAxis(OperatorConstants.OperatorRaise)
-      )); 
+    )); 
     configureBindings(); 
   }
 
