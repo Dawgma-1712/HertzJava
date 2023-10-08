@@ -19,19 +19,18 @@ public class ArmJoystickCommand extends CommandBase{
 
     @Override
     public void execute() {
-        double extend = extendValue.get();
-        double raise = raiseValue.get();
-        arm.manualArm(extend, raise);
-
-  }
+        double extend = Math.abs(extendValue.get()) > 0.04 ? extendValue.get() : 0;
+        double raise = Math.abs(raiseValue.get()) > 0.04 ? raiseValue.get() : 0;
+        arm.manualArm2(extend, raise);
+    }
 
     @Override
     public void end(boolean interrupted) {
 
-  }
+    }
 
     @Override
     public boolean isFinished() {
     return false;
-  }
+    }
 }
