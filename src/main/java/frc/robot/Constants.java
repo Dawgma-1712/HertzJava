@@ -49,7 +49,7 @@ public final class Constants {
   }
   public static final class OperatorConstants{
     public static final Map<String, Double> armExtendPresets = Map.ofEntries(
-      Map.entry("coneMid", 147.0),
+      Map.entry("coneMid", 37.0),
       Map.entry("coneHigh", 200.0),
       Map.entry("cubeMid", 79.0),
       Map.entry("cubeHigh", 200.0),

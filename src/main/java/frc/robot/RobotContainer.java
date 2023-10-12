@@ -48,7 +48,7 @@ public class RobotContainer {
     new JoystickButton(driver, 1).onTrue(new SwerveZeroHeading(swerveSubsystem));
 
     //Arm controls
-    new JoystickButton(operator, 6).onTrue(new ArmMode(arm, !arm.getIsCone()));//RB
+    new JoystickButton(operator, 6).toggleOnTrue(new ArmMode(arm));//RB
 
     if(arm.getIsCone()){
       new JoystickButton(operator, 1).onTrue(new ArmPIDCommand(arm, "coneMid"));//Button A
@@ -63,7 +63,7 @@ public class RobotContainer {
     new JoystickButton(operator, 7).onTrue(new ArmPIDCommand(arm, "substation"));//Button Back
 
     //Claw controls
-    new JoystickButton(operator, 5).onTrue(new ClawCMD(claw, !claw.getIsOpen()));//Button LB
+    new JoystickButton(operator, 5).toggleOnTrue(new ClawCMD(claw));//Button LB
   }
   public Command getAutonomousCommand() {
     return null;

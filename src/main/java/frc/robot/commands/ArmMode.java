@@ -7,22 +7,20 @@ public class ArmMode extends CommandBase{
     private final Arm arm;
     private boolean isCone;
 
-    public ArmMode(Arm arm, boolean isCone){
+    public ArmMode(Arm arm){
         this.arm = arm;
-        this.isCone = isCone;
     }
 
-    public void initialize(){
+    public void initialize(){}
 
-    }
     public void execute(){
-        arm.setIsCone(isCone);
+        arm.togleMode();
     }
-    public void end(boolean interrupted){
 
-    }
+    public void end(boolean interrupted){}
+
     public boolean isFinished(){
-        return arm.getIsCone() == isCone;
+        return true;
     }
 
 }

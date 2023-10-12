@@ -2,10 +2,12 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
@@ -32,7 +34,8 @@ public class Arm extends SubsystemBase{
     }
 
     public void periodic(){
-
+        SmartDashboard.putNumber("Extend Position", getExtendPosition());
+        SmartDashboard.putNumber("Raise Position", getRaise1Position());
     }
 
     public double getRaise1Position(){
@@ -50,6 +53,15 @@ public class Arm extends SubsystemBase{
     public boolean getIsCone(){
         return isCone;
     }
+    public void togleMode(){
+        isCone = !isCone;
+        if(isCone){
+            LED.set(0.69);
+        }
+        if(!isCone){
+            LED.set(0.91);
+        }
+    }
     public void stop(){
         raiseMotor1.stopMotor();
         raiseMotor2.stopMotor();
@@ -64,12 +76,6 @@ public class Arm extends SubsystemBase{
     }
 
     public void setPreset(String stage){
-        if(isCone){
-            LED.set(0.69);
-        }
-        if(!isCone){
-            LED.set(0.91);
-        }
         new Thread(() -> {
             extendMotor.set(armExtendPID.calculate(getExtendPosition(), OperatorConstants.armExtendPresets.get(stage)));
             System.out.println(armExtendPID.calculate(getExtendPosition(), OperatorConstants.armExtendPresets.get(stage)));
@@ -83,10 +89,16 @@ public class Arm extends SubsystemBase{
     }
 
     public void manualArm2(double extend, double raise){
-        //raise = raise < 0 ? raise : 1.5*raise;
         extendMotor.set(armExtendPID.calculate(getExtendPosition(), getExtendPosition() + 1.5*extend));
-        raiseMotor1.set(armRaisePID1.calculate(getRaise1Position(), getRaise1Position()));
-        raiseMotor2.set(armRaisePID2.calculate(getRaise2Position(), getRaise2Position()));
+
+        if(raise > 0){
+        raiseMotor1.set(armRaisePID1.calculate(getRaise1Position(), getRaise1Position() + raise) * 1.5);
+        raiseMotor2.set(armRaisePID2.calculate(getRaise2Position(), getRaise2Position() + raise) * 1.5);
+        }
+        else{
+            raiseMotor1.set(armRaisePID1.calculate(getRaise1Position(), getRaise1Position() + raise));
+            raiseMotor2.set(armRaisePID2.calculate(getRaise2Position(), getRaise2Position() + raise));
+        }
     }
 
     public void manualArm(double extend, double raise) {
