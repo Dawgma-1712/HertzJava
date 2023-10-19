@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 
@@ -44,13 +45,15 @@ public class SwerveModule {
         turningPidController = new PIDController(TurnkP, TurnkI, TurnkD);
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
 
-        resetEncoders();
+        resetTurnEncoders();
+        resetDriveEncoders();
     }
 
     public void stop(){
         driveMotor.set(0);
         turnMotor.set(0);
     }
+
     public double getDrivePosition(){
         return driveEncoder.getPosition();
     }
@@ -64,13 +67,17 @@ public class SwerveModule {
         return turnEncoder.getVelocity();
     }
     public double getAbsoluteEncoderAngle(){
-        return absoluteEncoder.getBusVoltage() / RobotController.getVoltage5V() * 2.0 * Math.PI;
+        //return absoluteEncoder.getBusVoltage() / RobotController.getVoltage5V() * 2.0 * Math.PI;
+        return absoluteEncoder.getAbsolutePosition() * 2 * Math.PI / 360;
     }
 
-    public void resetEncoders(){
-        driveEncoder.setPosition(0);
+    public void resetTurnEncoders(){
         turnEncoder.setPosition(getAbsoluteEncoderAngle());
     }
+    public void resetDriveEncoders(){
+        driveEncoder.setPosition(0);
+    }
+
     public SwerveModuleState getState(){
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurnPosition()));
     }
@@ -80,8 +87,8 @@ public class SwerveModule {
             turnMotor.set(0);
             return;
         }
-        state = SwerveModuleState.optimize(state, getState().angle);
-        driveMotor.set(state.speedMetersPerSecond /*/ DriveConstants.physicalMaxSpeedMetersPerSecond*/);
+        // state = SwerveModuleState.optimize(state, getState().angle);
+        driveMotor.set(state.speedMetersPerSecond  /*/ DriveConstants.physicalMaxSpeedMetersPerSecond*/);
         turnMotor.set(turningPidController.calculate(getTurnPosition(), state.angle.getRadians()));        
     }
 }

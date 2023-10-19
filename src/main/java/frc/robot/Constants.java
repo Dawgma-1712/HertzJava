@@ -71,9 +71,9 @@ public final class Constants {
 
     public static final int DriverYAxis = 1;
     public static final int DriverXAxis = 0;
-    public static final int kDriverRotAxis = 2;
+    public static final int kDriverRotAxis = 4;
     public static final int DriverFieldOrientedButton = 1;
 
-    public static final double deadband = 0.04;
+    public static final double deadband = 0.02;
   }
 }

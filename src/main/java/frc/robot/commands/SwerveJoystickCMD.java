@@ -38,30 +38,30 @@ public class SwerveJoystickCMD extends CommandBase {
     double xSpeed = xSpdFunction.get();
     double ySpeed = ySpdFunction.get();
     double turningSpeed = turningSpdFunction.get();
-
+    
     //Deadband
-    xSpeed = Math.abs(xSpeed) > OperatorConstants.deadband ? xSpeed : 0.0;
-    ySpeed = Math.abs(ySpeed) > OperatorConstants.deadband ? ySpeed : 0.0;
-    turningSpeed = Math.abs(turningSpeed) > OperatorConstants.deadband ? turningSpeed : 0.0;
+    // xSpeed = Math.abs(xSpeed) > OperatorConstants.deadband ? xSpeed : 0.0;
+    // ySpeed = Math.abs(ySpeed) > OperatorConstants.deadband ? ySpeed : 0.0;
+    // turningSpeed = Math.abs(turningSpeed) > OperatorConstants.deadband ? turningSpeed : 0.0;
 
     //Limits rate - if pushing drive stick too fast, robot will still accelerate slowly
-    xSpeed = xLimiter.calculate(xSpeed);
-    ySpeed = yLimiter.calculate(ySpeed);
-    turningSpeed = turningLimiter.calculate(turningSpeed);
+    //xSpeed = xLimiter.calculate(xSpeed);
+    //ySpeed = yLimiter.calculate(ySpeed);
+    //turningSpeed = turningLimiter.calculate(turningSpeed);
 
     ChassisSpeeds chassisSpeeds;
-    if(fieldOrientedFunction.get()){
-      chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-    }
-    else{
-      chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
-    }
+    // if(fieldOrientedFunction.get()){
+      // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+    // }
+    // else{
+      // chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
+    // }
+
+     chassisSpeeds = new ChassisSpeeds(ySpeed, xSpeed, turningSpeed);
 
     SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
     swerveSubsystem.setModuleStates(moduleStates);
-
-
   }
 
   @Override

@@ -1,4 +1,4 @@
-package frc.robot.commands;
+/*package frc.robot.commands;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -23,9 +23,9 @@ public class MoveToPosition extends CommandBase{
     }
 
     public void execute(){
-        Transform2d posDiff = targetPos.minus(swerveSubsystem.getPose());
-        SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(posDiff.getX(), posDiff.getY(), 0));
-        swerveSubsystem.setModuleStates(swerveModuleStates);
+        //Transform2d posDiff = targetPos.minus(swerveSubsystem.getPose());
+        //SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(posDiff.getX(), posDiff.getY(), 0));
+        //swerveSubsystem.setModuleStates(swerveModuleStates);
     }
 
     public void end(boolean interrupted){
@@ -33,9 +33,11 @@ public class MoveToPosition extends CommandBase{
     }
     
     public boolean isFinished(){
-        Transform2d posDiff = targetPos.minus(swerveSubsystem.getPose());
-        double dx = posDiff.getX();
-        double dy = posDiff.getX();
-        return dx*dx + dy*dy < 10;
+        //Transform2d posDiff = targetPos.minus(swerveSubsystem.getPose());
+        //double dx = posDiff.getX();
+        //double dy = posDiff.getX();
+        //return dx*dx + dy*dy < 10;
+        return false;
     }
 }
+*/

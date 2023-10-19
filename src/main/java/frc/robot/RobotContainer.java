@@ -29,8 +29,8 @@ public class RobotContainer {
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCMD(
       swerveSubsystem,
-      () -> -driver.getRawAxis(OperatorConstants.DriverYAxis),
-      () -> driver.getRawAxis(OperatorConstants.DriverXAxis),
+      () -> -driver.getRawAxis(OperatorConstants.DriverXAxis),
+      () -> driver.getRawAxis(OperatorConstants.DriverYAxis),
       () -> driver.getRawAxis(OperatorConstants.kDriverRotAxis),
       () -> !driver.getRawButton(OperatorConstants.DriverFieldOrientedButton)
     ));
@@ -45,7 +45,7 @@ public class RobotContainer {
 
   private void configureBindings() {
     //Swerve controls
-    new JoystickButton(driver, 1).onTrue(new SwerveZeroHeading(swerveSubsystem));
+    //new JoystickButton(driver, 1).onTrue(new SwerveZeroHeading(swerveSubsystem));
 
     //Arm controls
     new JoystickButton(operator, 6).toggleOnTrue(new ArmMode(arm));//RB

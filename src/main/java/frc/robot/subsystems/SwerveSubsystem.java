@@ -20,27 +20,29 @@ public class SwerveSubsystem extends SubsystemBase{
         DriveConstants.frontLeftTurningMotorPort,
         false, 
         false,
-        DriveConstants.frontLeftAbsoluteEncoder, 0.7, 0, 0);
+        DriveConstants.frontLeftAbsoluteEncoder, 0.2, 0, 0);
     private final SwerveModule frontRight = new SwerveModule(
         DriveConstants.frontRightDriveMotorPort,
         DriveConstants.frontRightTurningMotorPort,
         false,
         false,
-        DriveConstants.frontRightAbsoluteEncoder, 0.7, 0, 0);
+        DriveConstants.frontRightAbsoluteEncoder, 0.2, 0, 0);
     private final SwerveModule backLeft = new SwerveModule(
         DriveConstants.backLeftDriveMotorPort,
         DriveConstants.backLeftTurningMotorPort,
         false,
         false,
-        DriveConstants.backLeftAbsoluteEncoder, 0.7, 0, 0);
+        DriveConstants.backLeftAbsoluteEncoder, 0.2, 0, 0);
     private final SwerveModule backRight = new SwerveModule(
         DriveConstants.backRightDriveMotorPort,
         DriveConstants.backRightTurningMotorPort,
         false,
         false,
-        DriveConstants.backLeftAbsoluteEncoder, 0.7, 0, 0);
+        DriveConstants.backRightAbsoluteEncoder, 0.2, 0, 0);
 
     private AHRS gyro = new AHRS(SerialPort.Port.kUSB1);
+
+    private int count = 0;
 
     public SwerveSubsystem(){
         new Thread(() -> {
@@ -75,7 +77,30 @@ public class SwerveSubsystem extends SubsystemBase{
     }
 
     public void periodic(){
+        // count++;
+        // if(count >= 100){
+        //     resetModules();
+        //     count = 0;
+        // }
+        SmartDashboard.putNumber("count", count);
         SmartDashboard.putNumber("Robot Heading", getHeading());
+        SmartDashboard.putNumber("Front Left", frontLeft.getAbsoluteEncoderAngle());
+        SmartDashboard.putNumber("Front Right", frontRight.getAbsoluteEncoderAngle());
+        SmartDashboard.putNumber("Back Left", backLeft.getAbsoluteEncoderAngle());
+        SmartDashboard.putNumber("Back Right", backRight.getAbsoluteEncoderAngle());
+
+        SmartDashboard.putNumber("Front Left2", frontLeft.getTurnPosition());
+        SmartDashboard.putNumber("Front Right2", frontRight.getTurnPosition());
+        SmartDashboard.putNumber("Back Left2", backLeft.getTurnPosition());
+        SmartDashboard.putNumber("Back Right2", backRight.getTurnPosition());
+
+    }
+
+    public void resetModules(){
+        frontLeft.resetTurnEncoders();
+        frontRight.resetTurnEncoders();
+        backLeft.resetTurnEncoders();
+        backRight.resetTurnEncoders();
     }
 
     public void stopModules(){
@@ -84,11 +109,17 @@ public class SwerveSubsystem extends SubsystemBase{
         backLeft.stop();
         backRight.stop();
     }
+
+    
     public void setModuleStates(SwerveModuleState[] states){
         SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveConstants.physicalMaxSpeedMetersPerSecond);
         frontLeft.setDesiredState(states[0]);
         frontRight.setDesiredState(states[1]);
         backLeft.setDesiredState(states[2]);
         backRight.setDesiredState(states[3]);
+        SmartDashboard.putNumber("angle 1", states[0].angle.getRadians());
+        SmartDashboard.putNumber("angle 2", states[1].angle.getRadians());
+        SmartDashboard.putNumber("angle 3", states[2].angle.getRadians());
+        SmartDashboard.putNumber("angle 4", states[3].angle.getRadians());
     }
 }
