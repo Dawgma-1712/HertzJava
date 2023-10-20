@@ -8,6 +8,7 @@ import frc.robot.Constants.*;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
@@ -27,10 +28,35 @@ public class Arm extends SubsystemBase{
     private final PIDController armRaisePID1 = new PIDController(0.028600000000000, 0.005, 0.008);
     private final PIDController armRaisePID2 = new PIDController(0.028600000000000, 0.005, 0.008);
 
+    private final PIDController armExtendPIDM = new PIDController(0.27891030029999945400000000000, 0, 0);
+    private final PIDController armRaisePID1M = new PIDController(0.2, 0.0, 0.0);
+    private final PIDController armRaisePID2M = new PIDController(0.2, 0.0, 0.0);
+
+    //private final SparkMaxPIDController armExtendPID = extendMotor.getPIDController();
+    //private final SparkMaxPIDController armRaisePID1 = raiseMotor1.getPIDController();
+    //private final SparkMaxPIDController armRaisePID2 = raiseMotor2.getPIDController();
+
     private final Spark LED = new Spark(0);
 
     public Arm(){
         raiseMotor2.setInverted(true);
+
+        /*
+        armExtendPID.setP(0.2789);
+        armExtendPID.setD(0);
+        armExtendPID.setI(0);
+        armExtendPID.setFF(0);
+
+        armRaisePID1.setP(0.0286);
+        armRaisePID1.setD(0.005);
+        armRaisePID1.setI(0);
+        armRaisePID1.setFF(0.2);
+
+        armRaisePID2.setP(0.0286);
+        armRaisePID2.setD(0.005);
+        armRaisePID2.setI(0);
+        armRaisePID2.setFF(0.2);
+        */
     }
 
     public void periodic(){
@@ -77,20 +103,24 @@ public class Arm extends SubsystemBase{
 
     public void setPreset(String stage){
         new Thread(() -> {
+            //armExtendPID.setReference(OperatorConstants.armExtendPresets.get(stage), ControlType.kPosition);
             extendMotor.set(armExtendPID.calculate(getExtendPosition(), OperatorConstants.armExtendPresets.get(stage)));
-            System.out.println(armExtendPID.calculate(getExtendPosition(), OperatorConstants.armExtendPresets.get(stage)));
         }).start();
         new Thread(() -> {
+            //armRaisePID1.setReference(OperatorConstants.armRaisePresets.get(stage), ControlType.kPosition);
             raiseMotor1.set(armRaisePID1.calculate(getRaise1Position(), OperatorConstants.armRaisePresets.get(stage)));
         }).start();
         new Thread(() -> {
+            //armRaisePID2.setReference(OperatorConstants.armRaisePresets.get(stage), ControlType.kPosition);
             raiseMotor2.set(armRaisePID2.calculate(getRaise2Position(), OperatorConstants.armRaisePresets.get(stage)));
         }).start();
     }
 
     public void manualArm2(double extend, double raise){
-        extendMotor.set(armExtendPID.calculate(getExtendPosition(), getExtendPosition() + 1.5*extend));
-
+        extendMotor.set(armExtendPIDM.calculate(getExtendPosition(), getExtendPosition() + 1.5*extend));
+        raiseMotor1.set(armRaisePID1M.calculate(getRaise1Position(), getRaise1Position() + raise));
+        raiseMotor2.set(armRaisePID2M.calculate(getRaise2Position(), getRaise2Position() + raise));
+        /*
         if(raise > 0){
         raiseMotor1.set(armRaisePID1.calculate(getRaise1Position(), getRaise1Position() + raise) * 1.5);
         raiseMotor2.set(armRaisePID2.calculate(getRaise2Position(), getRaise2Position() + raise) * 1.5);
@@ -99,6 +129,7 @@ public class Arm extends SubsystemBase{
             raiseMotor1.set(armRaisePID1.calculate(getRaise1Position(), getRaise1Position() + raise));
             raiseMotor2.set(armRaisePID2.calculate(getRaise2Position(), getRaise2Position() + raise));
         }
+        */
     }
 
     public void manualArm(double extend, double raise) {

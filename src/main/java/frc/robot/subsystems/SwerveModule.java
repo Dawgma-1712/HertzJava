@@ -66,6 +66,9 @@ public class SwerveModule {
     public double getAbsoluteEncoderAngle(){
         return absoluteEncoder.getBusVoltage() / RobotController.getVoltage5V() * 2.0 * Math.PI;
     }
+    public double getAbsoluteEncoderRadians(){
+        return absoluteEncoder.getAbsolutePosition() / 360;
+    }
 
     public void resetEncoders(){
         driveEncoder.setPosition(0);

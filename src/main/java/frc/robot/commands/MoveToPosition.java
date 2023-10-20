@@ -1,4 +1,4 @@
-package frc.robot.commands;
+/*package frc.robot.commands;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -39,3 +39,4 @@ public class MoveToPosition extends CommandBase{
         return dx*dx + dy*dy < 10;
     }
 }
+*/
