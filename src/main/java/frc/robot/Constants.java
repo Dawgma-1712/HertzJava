@@ -51,7 +51,7 @@ public final class Constants {
     public static final Map<String, Double> armExtendPresets = Map.ofEntries(
       Map.entry("coneMid", 37.0),
       Map.entry("coneHigh", 200.0),
-      Map.entry("cubeMid", 79.0),
+      Map.entry("cubeMid", 30.0),
       Map.entry("cubeHigh", 200.0),
       Map.entry("stow", 0.0),
       Map.entry("substation", 120.0),
@@ -64,14 +64,14 @@ public final class Constants {
       Map.entry("stow", 0.0),
       Map.entry("substation", 16.2),
       Map.entry("ground", 28.5));
-    public static final int OperatorControllerPort = 0;
-    public static final int DriverControllerPort = 1;
+    public static final int OperatorControllerPort = 1;
+    public static final int DriverControllerPort = 0;
     public static final int OperatorRaise = 5;
     public static final int OperatorExtend = 1;
 
     public static final int DriverYAxis = 1;
     public static final int DriverXAxis = 0;
-    public static final int kDriverRotAxis = 4;
+    public static final int kDriverRotAxis = 2;
     public static final int DriverFieldOrientedButton = 1;
 
     public static final double deadband = 0.04;

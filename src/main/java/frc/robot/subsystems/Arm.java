@@ -25,8 +25,8 @@ public class Arm extends SubsystemBase{
     private boolean isCone = false;//Change if initial mode is different
 
     private final PIDController armExtendPID = new PIDController(0.27891030029999945400000000000, 0, 0);
-    private final PIDController armRaisePID1 = new PIDController(0.028600000000000, 0.005, 0.008);
-    private final PIDController armRaisePID2 = new PIDController(0.028600000000000, 0.005, 0.008);
+    private final PIDController armRaisePID1 = new PIDController(0.028600000000000, 0.006, 0.008);
+    private final PIDController armRaisePID2 = new PIDController(0.028600000000000, 0.006, 0.008);
 
     private final PIDController armExtendPIDM = new PIDController(0.27891030029999945400000000000, 0, 0);
     private final PIDController armRaisePID1M = new PIDController(0.2, 0.0, 0.0);
@@ -38,8 +38,15 @@ public class Arm extends SubsystemBase{
 
     private final Spark LED = new Spark(0);
 
+    private double extendGoalState = 0.0, raiseGoalState = 0.0;
+    private String currentState = "";
+
     public Arm(){
         raiseMotor2.setInverted(true);
+
+        //raiseEncoder1.setPosition(0);
+        //raiseEncoder2.setPosition(0);
+        //extendEncoder.setPosition(0);
 
         /*
         armExtendPID.setP(0.2789);
@@ -60,8 +67,24 @@ public class Arm extends SubsystemBase{
     }
 
     public void periodic(){
+        new Thread(() -> {
+            //armExtendPID.setReference(OperatorConstants.armExtendPresets.get(stage), ControlType.kPosition);
+            extendMotor.set(armExtendPID.calculate(getExtendPosition(), extendGoalState));
+        }).start();
+        new Thread(() -> {
+            //armRaisePID1.setReference(OperatorConstants.armRaisePresets.get(stage), ControlType.kPosition);
+            raiseMotor1.set(armRaisePID1.calculate(getRaise1Position(), raiseGoalState));
+        }).start();
+        new Thread(() -> {
+            //armRaisePID2.setReference(OperatorConstants.armRaisePresets.get(stage), ControlType.kPosition);
+            raiseMotor2.set(armRaisePID2.calculate(getRaise2Position(), raiseGoalState));
+        }).start();
+        SmartDashboard.putNumber("Extend Goal Position", extendGoalState);
+        SmartDashboard.putNumber("Raise Goal Position", raiseGoalState);
         SmartDashboard.putNumber("Extend Position", getExtendPosition());
         SmartDashboard.putNumber("Raise Position", getRaise1Position());
+        SmartDashboard.putString("Stage", currentState);
+        SmartDashboard.putBoolean("Cone Mode?", isCone);
     }
 
     public double getRaise1Position(){
@@ -102,6 +125,19 @@ public class Arm extends SubsystemBase{
     }
 
     public void setPreset(String stage){
+        if(isCone && (stage.equals("cubeMid") || stage.equals("cubeHigh"))){
+            if(stage.equals("cubeMid")){
+                stage = "coneMid";
+            }
+            if(stage.equals("cubeHigh")){
+                stage = "coneHigh";
+            }
+        }
+        currentState = stage;
+        extendGoalState = OperatorConstants.armExtendPresets.get(stage);
+        raiseGoalState = OperatorConstants.armRaisePresets.get(stage);
+
+        /*
         new Thread(() -> {
             //armExtendPID.setReference(OperatorConstants.armExtendPresets.get(stage), ControlType.kPosition);
             extendMotor.set(armExtendPID.calculate(getExtendPosition(), OperatorConstants.armExtendPresets.get(stage)));
@@ -114,6 +150,7 @@ public class Arm extends SubsystemBase{
             //armRaisePID2.setReference(OperatorConstants.armRaisePresets.get(stage), ControlType.kPosition);
             raiseMotor2.set(armRaisePID2.calculate(getRaise2Position(), OperatorConstants.armRaisePresets.get(stage)));
         }).start();
+        */
     }
 
     public void manualArm2(double extend, double raise){
@@ -133,8 +170,10 @@ public class Arm extends SubsystemBase{
     }
 
     public void manualArm(double extend, double raise) {
-        extendMotor.set(extend);
-        raiseMotor1.set(raise/10);
-        raiseMotor2.set(raise/10);
+        //extendMotor.set(extend);
+        //raiseMotor1.set(raise/10);
+        //raiseMotor2.set(raise/10);
+        extendGoalState += extend/5.0;
+        raiseGoalState += raise/5.0;
     }
 }

@@ -21,7 +21,7 @@ public class ArmJoystickCommand extends CommandBase{
     public void execute() {
         double extend = Math.abs(extendValue.get()) > 0.04 ? extendValue.get() : 0;
         double raise = Math.abs(raiseValue.get()) > 0.04 ? raiseValue.get() : 0;
-        arm.manualArm2(extend, raise);
+        arm.manualArm(extend, raise);
     }
 
     @Override

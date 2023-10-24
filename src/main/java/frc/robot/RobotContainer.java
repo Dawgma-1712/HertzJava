@@ -54,7 +54,7 @@ public class RobotContainer {
       new JoystickButton(operator, 1).onTrue(new ArmPIDCommand(arm, "coneMid"));//Button A
       new JoystickButton(operator, 4).onTrue(new ArmPIDCommand(arm, "coneHigh"));//Button Y
     }
-    else{
+    if(!arm.getIsCone()){
       new JoystickButton(operator, 1).onTrue(new ArmPIDCommand(arm, "cubeMid"));
       new JoystickButton(operator, 4).onTrue(new ArmPIDCommand(arm, "cubeHigh"));
     }
