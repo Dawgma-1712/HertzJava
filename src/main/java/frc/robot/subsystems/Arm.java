@@ -28,9 +28,9 @@ public class Arm extends SubsystemBase{
     private final PIDController armRaisePID1 = new PIDController(0.028600000000000, 0.006, 0.008);
     private final PIDController armRaisePID2 = new PIDController(0.028600000000000, 0.006, 0.008);
 
-    private final PIDController armExtendPIDM = new PIDController(0.27891030029999945400000000000, 0, 0);
-    private final PIDController armRaisePID1M = new PIDController(0.2, 0.0, 0.0);
-    private final PIDController armRaisePID2M = new PIDController(0.2, 0.0, 0.0);
+    //private final PIDController armExtendPIDM = new PIDController(0.27891030029999945400000000000, 0, 0);
+    //private final PIDController armRaisePID1M = new PIDController(0.2, 0.0, 0.0);
+    //private final PIDController armRaisePID2M = new PIDController(0.2, 0.0, 0.0);
 
     //private final SparkMaxPIDController armExtendPID = extendMotor.getPIDController();
     //private final SparkMaxPIDController armRaisePID1 = raiseMotor1.getPIDController();
@@ -154,9 +154,9 @@ public class Arm extends SubsystemBase{
     }
 
     public void manualArm2(double extend, double raise){
-        extendMotor.set(armExtendPIDM.calculate(getExtendPosition(), getExtendPosition() + 1.5*extend));
-        raiseMotor1.set(armRaisePID1M.calculate(getRaise1Position(), getRaise1Position() + raise));
-        raiseMotor2.set(armRaisePID2M.calculate(getRaise2Position(), getRaise2Position() + raise));
+        //extendMotor.set(armExtendPIDM.calculate(getExtendPosition(), getExtendPosition() + 1.5*extend));
+        //raiseMotor1.set(armRaisePID1M.calculate(getRaise1Position(), getRaise1Position() + raise));
+        //raiseMotor2.set(armRaisePID2M.calculate(getRaise2Position(), getRaise2Position() + raise));
         /*
         if(raise > 0){
         raiseMotor1.set(armRaisePID1.calculate(getRaise1Position(), getRaise1Position() + raise) * 1.5);
@@ -173,7 +173,7 @@ public class Arm extends SubsystemBase{
         //extendMotor.set(extend);
         //raiseMotor1.set(raise/10);
         //raiseMotor2.set(raise/10);
-        extendGoalState += extend/5.0;
+        extendGoalState += extend;
         raiseGoalState += raise/5.0;
     }
 }

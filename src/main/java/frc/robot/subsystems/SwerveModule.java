@@ -36,7 +36,7 @@ public class SwerveModule {
 
         driveEncoder.setPositionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter);
         driveEncoder.setVelocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
-        turnEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Meter);
+        turnEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Radians);
         turnEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2MeterPerSec);
 
         absoluteEncoder = new CANCoder(absoluteEncoderID);
@@ -69,20 +69,23 @@ public class SwerveModule {
     public double getAbsoluteEncoderRadians(){
         return absoluteEncoder.getAbsolutePosition() / 360;
     }
+    public double getTurnMotorOutput(){
+        return turnMotor.getOutputCurrent();
+    }
 
     public void resetEncoders(){
         driveEncoder.setPosition(0);
-        turnEncoder.setPosition(getAbsoluteEncoderAngle());
+        turnEncoder.setPosition(0);//getAbsoluteEncoderRadians());
     }
     public SwerveModuleState getState(){
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurnPosition()));
     }
     public void setDesiredState(SwerveModuleState state){
-        if(Math.abs(state.speedMetersPerSecond) < 0.001){
+        /*if(Math.abs(state.speedMetersPerSecond) < 0.001){
             driveMotor.set(0);
             turnMotor.set(0);
             return;
-        }
+        }*/
         state = SwerveModuleState.optimize(state, getState().angle);
         driveMotor.set(state.speedMetersPerSecond /*/ DriveConstants.physicalMaxSpeedMetersPerSecond*/);
         turnMotor.set(turningPidController.calculate(getTurnPosition(), state.angle.getRadians()));        

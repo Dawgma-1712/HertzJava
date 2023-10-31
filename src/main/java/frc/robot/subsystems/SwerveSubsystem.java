@@ -20,27 +20,29 @@ public class SwerveSubsystem extends SubsystemBase{
         DriveConstants.frontLeftTurningMotorPort,
         false, 
         false,
-        DriveConstants.frontLeftAbsoluteEncoder, 0.7, 0, 0);
+        DriveConstants.frontLeftAbsoluteEncoder, 0.75, 0, 0);
     private final SwerveModule frontRight = new SwerveModule(
         DriveConstants.frontRightDriveMotorPort,
         DriveConstants.frontRightTurningMotorPort,
         false,
         false,
-        DriveConstants.frontRightAbsoluteEncoder, 0.7, 0, 0);
+        DriveConstants.frontRightAbsoluteEncoder, 0.75, 0, 0);
     private final SwerveModule backLeft = new SwerveModule(
         DriveConstants.backLeftDriveMotorPort,
         DriveConstants.backLeftTurningMotorPort,
         false,
         false,
-        DriveConstants.backLeftAbsoluteEncoder, 0.7, 0, 0);
+        DriveConstants.backLeftAbsoluteEncoder, 0.75, 0, 0);
     private final SwerveModule backRight = new SwerveModule(
         DriveConstants.backRightDriveMotorPort,
         DriveConstants.backRightTurningMotorPort,
         false,
         false,
-        DriveConstants.backLeftAbsoluteEncoder, 0.7, 0, 0);
+        DriveConstants.backLeftAbsoluteEncoder, 0.75, 0, 0);
 
     private AHRS gyro = new AHRS(SerialPort.Port.kUSB1);
+
+    private double FLTarget, FRTarget, BLTarget, BRTarget;
 
     public SwerveSubsystem(){
         new Thread(() -> {
@@ -75,7 +77,21 @@ public class SwerveSubsystem extends SubsystemBase{
     }
 
     public void periodic(){
+        SmartDashboard.putNumber("Front Left Target Rotation", FLTarget);
+        SmartDashboard.putNumber("Front Right Target Rotation", FRTarget);
+        SmartDashboard.putNumber("Back Left Target Rotation", BLTarget);
+        SmartDashboard.putNumber("Back Right Target Rotation", BRTarget);
+
         SmartDashboard.putNumber("Robot Heading", getHeading());
+        SmartDashboard.putNumber("Front Left Rotation", frontLeft.getTurnPosition());
+        SmartDashboard.putNumber("Front Right Rotation", frontRight.getTurnPosition());
+        SmartDashboard.putNumber("Back Left Rotation", backLeft.getTurnPosition());
+        SmartDashboard.putNumber("Back Right Rotation", backRight.getTurnPosition());
+
+        SmartDashboard.putNumber("Front Left Turn Output", frontLeft.getTurnMotorOutput());
+        SmartDashboard.putNumber("Front Right Turn Output", frontRight.getTurnMotorOutput());
+        SmartDashboard.putNumber("Back Left Turn Output", backLeft.getTurnMotorOutput());
+        SmartDashboard.putNumber("Back Right Turn Output", backRight.getTurnMotorOutput());
     }
 
     public void stopModules(){
@@ -85,6 +101,11 @@ public class SwerveSubsystem extends SubsystemBase{
         backRight.stop();
     }
     public void setModuleStates(SwerveModuleState[] states){
+        FLTarget = states[0].angle.getRadians();
+        FRTarget = states[1].angle.getRadians();
+        BLTarget = states[2].angle.getRadians();
+        BRTarget = states[3].angle.getRadians();
+
         SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveConstants.physicalMaxSpeedMetersPerSecond);
         frontLeft.setDesiredState(states[0]);
         frontRight.setDesiredState(states[1]);

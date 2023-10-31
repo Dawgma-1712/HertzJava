@@ -11,9 +11,9 @@ public final class Constants {
     public static final double kDriveMotorGearRatio = 1/8.14;
     public static final double kTurningMotorGearRatio = 1/21.43;
     public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * WheelDiameterMeters; // converts rotation to meters
-    public static final double kTurningEncoderRot2Meter = kTurningMotorGearRatio * 2 * Math.PI;
+    public static final double kTurningEncoderRot2Radians = kTurningMotorGearRatio * 2 * Math.PI;
     public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
-    public static final double kTurningEncoderRPM2MeterPerSec = kTurningEncoderRot2Meter / 60;
+    public static final double kTurningEncoderRPM2MeterPerSec = kTurningEncoderRot2Radians / 60;
     //public static final double kPTurning = 0.5; //PID -> P Value for turning
   }
 
@@ -71,7 +71,7 @@ public final class Constants {
 
     public static final int DriverYAxis = 1;
     public static final int DriverXAxis = 0;
-    public static final int kDriverRotAxis = 2;
+    public static final int kDriverRotAxis = 4;
     public static final int DriverFieldOrientedButton = 1;
 
     public static final double deadband = 0.04;

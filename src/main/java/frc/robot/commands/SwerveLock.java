@@ -25,20 +25,21 @@ public class SwerveLock extends CommandBase {
 
   @Override
   public void execute() {
-
+    System.out.println("Happened");
     swerveSubsystem.setModuleStates(states);
   }
 
   @Override
   public void end(boolean interrupted) {
+    System.out.println("Ended ended");
     swerveSubsystem.stopModules();
   }
 
   @Override
   public boolean isFinished() {
-    return Math.abs(swerveSubsystem.getFL().getTurnPosition() - states[0].angle.getRadians()) < 3 && 
-          Math.abs(swerveSubsystem.getFR().getTurnPosition() - states[1].angle.getRadians()) < 3 && 
-          Math.abs(swerveSubsystem.getBL().getTurnPosition() - states[2].angle.getRadians()) < 3 && 
-          Math.abs(swerveSubsystem.getBR().getTurnPosition() - states[3].angle.getRadians()) < 3;
+    return Math.abs(swerveSubsystem.getFL().getTurnPosition() - states[0].angle.getRadians()) < 0.1 && 
+          Math.abs(swerveSubsystem.getFR().getTurnPosition() - states[1].angle.getRadians()) < 0.1 && 
+          Math.abs(swerveSubsystem.getBL().getTurnPosition() - states[2].angle.getRadians()) < 0.1 && 
+          Math.abs(swerveSubsystem.getBR().getTurnPosition() - states[3].angle.getRadians()) < 0.1;
   }
 }

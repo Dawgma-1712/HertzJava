@@ -17,6 +17,7 @@ import frc.robot.subsystems.Claw;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.*;
 
 public class RobotContainer {
   
@@ -46,21 +47,22 @@ public class RobotContainer {
   private void configureBindings() {
     //Swerve controls
     new JoystickButton(driver, 1).onTrue(new SwerveZeroHeading(swerveSubsystem));
+    new JoystickButton(driver, 9).onTrue(new SwerveLock(swerveSubsystem));
 
     //Arm controls
     new JoystickButton(operator, 6).toggleOnTrue(new ArmMode(arm));//RB
 
     if(arm.getIsCone()){
-      new JoystickButton(operator, 1).onTrue(new ArmPIDCommand(arm, "coneMid"));//Button A
+      new JoystickButton(operator, 3).onTrue(new ArmPIDCommand(arm, "coneMid"));//Button X
       new JoystickButton(operator, 4).onTrue(new ArmPIDCommand(arm, "coneHigh"));//Button Y
     }
     if(!arm.getIsCone()){
-      new JoystickButton(operator, 1).onTrue(new ArmPIDCommand(arm, "cubeMid"));
+      new JoystickButton(operator, 3).onTrue(new ArmPIDCommand(arm, "cubeMid"));
       new JoystickButton(operator, 4).onTrue(new ArmPIDCommand(arm, "cubeHigh"));
     }
-    new JoystickButton(operator, 3).onTrue(new ArmPIDCommand(arm, "stow"));//Button X
-    new JoystickButton(operator, 2).onTrue(new ArmPIDCommand(arm, "ground"));//Button B
-    new JoystickButton(operator, 7).onTrue(new ArmPIDCommand(arm, "substation"));//Button Back
+    new JoystickButton(operator, 2).onTrue(new ArmPIDCommand(arm, "stow"));//Button B
+    new JoystickButton(operator, 1).onTrue(new ArmPIDCommand(arm, "ground"));//Button A
+    //new JoystickButton(operator, 7).onTrue(new ArmPIDCommand(arm, "substation"));//Button Back
 
     //Claw controls
     new JoystickButton(operator, 5).toggleOnTrue(new ClawCMD(claw));//Button LB
