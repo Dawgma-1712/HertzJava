@@ -45,9 +45,9 @@ public class SwerveJoystickCMD extends CommandBase {
     turningSpeed = Math.abs(turningSpeed) > OperatorConstants.deadband ? turningSpeed : 0.0;
 
     //Limits rate - if pushing drive stick too fast, robot will still accelerate slowly
-    //xSpeed = xLimiter.calculate(xSpeed);
-    //ySpeed = yLimiter.calculate(ySpeed);
-    //turningSpeed = turningLimiter.calculate(turningSpeed);
+    xSpeed = xLimiter.calculate(xSpeed);
+    ySpeed = yLimiter.calculate(ySpeed);
+    turningSpeed = turningLimiter.calculate(turningSpeed);
 
     ChassisSpeeds chassisSpeeds;
     if(fieldOrientedFunction.get()){

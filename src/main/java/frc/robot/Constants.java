@@ -39,13 +39,11 @@ public final class Constants {
     public static final int backRightAbsoluteEncoder = 12;
 
     public static final double physicalMaxSpeedMetersPerSecond = 10;
-    public static final double physicalMaxAngularSpeedRadiansPerSecond = 2*2*Math.PI;
+    public static final double physicalMaxAngularSpeedRadiansPerSecond = 1*2*Math.PI;
     public static final double teleDriveMaxSpeedMetersPerSecond = physicalMaxSpeedMetersPerSecond/4;
     public static final double teleDriveMaxAngularSpeedRadiansPerSecond = physicalMaxAngularSpeedRadiansPerSecond/4;
     public static final double teleDriveMaxAccelerationUnitsPerSecond = 3;
-    public static final double teleDriveMaxAngularAccelerationUnitsPerSecond = 3;
-
-    
+    public static final double teleDriveMaxAngularAccelerationUnitsPerSecond = 1;    
   }
   public static final class OperatorConstants{
     public static final Map<String, Double> armExtendPresets = Map.ofEntries(
@@ -71,9 +69,9 @@ public final class Constants {
 
     public static final int DriverYAxis = 1;
     public static final int DriverXAxis = 0;
-    public static final int kDriverRotAxis = 4;
+    public static final int kDriverRotAxis = 2;
     public static final int DriverFieldOrientedButton = 1;
 
-    public static final double deadband = 0.04;
+    public static final double deadband = 0.1;
   }
 }
