@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.SwerveSubsystem;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 public class SwerveJoystickCMD extends CommandBase {
 
@@ -17,6 +18,13 @@ public class SwerveJoystickCMD extends CommandBase {
   private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
   private final Supplier<Boolean> fieldOrientedFunction;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
+
+  private final SwerveModuleState[] lockedStates = {
+    new SwerveModuleState(0, new Rotation2d(-Math.PI/4.0)),//Front left
+    new SwerveModuleState(0, new Rotation2d(Math.PI/4.0)),//Front right
+    new SwerveModuleState(0, new Rotation2d(Math.PI/4.0)),//Back left
+    new SwerveModuleState(0, new Rotation2d(-Math.PI/4.0))//Back right
+  };
 
   public SwerveJoystickCMD(SwerveSubsystem swerveSubsystem, Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Boolean> fieldOrientedFunction){
     this.swerveSubsystem = swerveSubsystem;
@@ -34,6 +42,11 @@ public class SwerveJoystickCMD extends CommandBase {
 
   @Override
   public void execute() {
+
+    if(swerveSubsystem.locked){
+      swerveSubsystem.setModuleStates(lockedStates);
+      return;
+    }
     //Gets real time joystick input
     double xSpeed = xSpdFunction.get();
     double ySpeed = ySpdFunction.get();

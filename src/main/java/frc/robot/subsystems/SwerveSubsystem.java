@@ -44,7 +44,10 @@ public class SwerveSubsystem extends SubsystemBase{
 
     private double FLTarget, FRTarget, BLTarget, BRTarget;
 
+    public boolean locked;
+
     public SwerveSubsystem(){
+        locked = false;
         new Thread(() -> {
             try{
                 Thread.sleep(1000);
@@ -99,6 +102,12 @@ public class SwerveSubsystem extends SubsystemBase{
         frontRight.stop();
         backLeft.stop();
         backRight.stop();
+    }
+    public void setSpeed(double speed){
+        frontLeft.setPercentSpeed(speed);
+        frontRight.setPercentSpeed(speed);
+        backLeft.setPercentSpeed(speed);
+        backRight.setPercentSpeed(speed);
     }
     public void setModuleStates(SwerveModuleState[] states){
         FLTarget = states[0].angle.getRadians();

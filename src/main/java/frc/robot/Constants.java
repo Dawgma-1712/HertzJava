@@ -43,7 +43,7 @@ public final class Constants {
     public static final double teleDriveMaxSpeedMetersPerSecond = physicalMaxSpeedMetersPerSecond/4;
     public static final double teleDriveMaxAngularSpeedRadiansPerSecond = physicalMaxAngularSpeedRadiansPerSecond/4;
     public static final double teleDriveMaxAccelerationUnitsPerSecond = 3;
-    public static final double teleDriveMaxAngularAccelerationUnitsPerSecond = 1;    
+    public static final double teleDriveMaxAngularAccelerationUnitsPerSecond = 3;    
   }
   public static final class OperatorConstants{
     public static final Map<String, Double> armExtendPresets = Map.ofEntries(

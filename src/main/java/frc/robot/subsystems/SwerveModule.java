@@ -21,6 +21,7 @@ public class SwerveModule {
     private final RelativeEncoder driveEncoder;
     private final RelativeEncoder turnEncoder;
 
+    private double percentSpeed;
     private final PIDController turningPidController;
 
     private final CANCoder absoluteEncoder;
@@ -46,6 +47,8 @@ public class SwerveModule {
 
         turningPidController = new PIDController(TurnkP, TurnkI, TurnkD);
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
+
+        percentSpeed = 1;
 
         resetEncoders();
     }
@@ -80,6 +83,10 @@ public class SwerveModule {
         driveEncoder.setPosition(0);
         turnEncoder.setPosition(0);//getAbsoluteEncoderRadians());
     }
+
+    public void setPercentSpeed(double speed){
+        this.percentSpeed = speed;
+    }
     public SwerveModuleState getState(){
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurnPosition()));
     }
@@ -90,7 +97,7 @@ public class SwerveModule {
             return;
         }*/
         state = SwerveModuleState.optimize(state, getState().angle);
-        driveMotor.set(state.speedMetersPerSecond /*/ DriveConstants.physicalMaxSpeedMetersPerSecond*/);
+        driveMotor.set(state.speedMetersPerSecond  * percentSpeed/*/ DriveConstants.physicalMaxSpeedMetersPerSecond*/);
         turnMotor.set(turningPidController.calculate(getTurnPosition(), state.angle.getRadians()));        
     }
 }
