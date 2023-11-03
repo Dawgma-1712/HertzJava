@@ -25,8 +25,8 @@ public class Arm extends SubsystemBase{
     private boolean isCone = false;//Change if initial mode is different
 
     private final PIDController armExtendPID = new PIDController(0.27891030029999945400000000000, 0, 0);
-    private final PIDController armRaisePID1 = new PIDController(0.025, 0.02, 0.01);
-    private final PIDController armRaisePID2 = new PIDController(0.025, 0.02, 0.01);
+    private final PIDController armRaisePID1 = new PIDController(0.028600000000000, 0.005, 0.008);
+    private final PIDController armRaisePID2 = new PIDController(0.028600000000000, 0.005, 0.008);
 
     //private final PIDController armExtendPIDM = new PIDController(0.27891030029999945400000000000, 0, 0);
     //private final PIDController armRaisePID1M = new PIDController(0.2, 0.0, 0.0);
