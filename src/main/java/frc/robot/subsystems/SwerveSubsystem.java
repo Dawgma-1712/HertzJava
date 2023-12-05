@@ -14,6 +14,12 @@ import frc.robot.commands.SwerveJoystickCMD;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathfindHolonomic;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 public class SwerveSubsystem extends SubsystemBase{
     private final SwerveModule frontLeft = new SwerveModule(
         DriveConstants.frontLeftDriveMotorPort,
@@ -54,6 +60,21 @@ public class SwerveSubsystem extends SubsystemBase{
             } catch(Exception e){}
             zeroHeading();
         }).start();
+
+        AutoBuilder.configureHolonomic(
+            this::getPose, 
+            this::resetPose, 
+            this::getRobotRelativeSpeeds, 
+            this::driveRobotRelative, 
+            new HolonomicPathFollowerConfig(
+                new PIDConstants(5.0, 0, 0),
+                new PIDConstants(5.0, 0, 0),
+                4.5,
+                0.4,
+                new ReplanningConfig()
+            ), 
+            this
+        );
     }
 
     public SwerveModule getFL(){
