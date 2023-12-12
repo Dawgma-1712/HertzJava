@@ -1,9 +1,13 @@
 package frc.robot.subsystems;
 
+import java.util.function.Supplier;
+
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -12,6 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 //import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.SwerveJoystickCMD;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -48,6 +53,13 @@ public class SwerveSubsystem extends SubsystemBase{
         false,
         DriveConstants.backLeftAbsoluteEncoder, 0.75, 0, 0);
 
+    private final SwerveModuleState[] lockedStates = {
+            new SwerveModuleState(0, new Rotation2d(-Math.PI/4.0)),//Front left
+            new SwerveModuleState(0, new Rotation2d(Math.PI/4.0)),//Front right
+            new SwerveModuleState(0, new Rotation2d(Math.PI/4.0)),//Back left
+            new SwerveModuleState(0, new Rotation2d(-Math.PI/4.0))//Back right
+          };
+
     private AHRS gyro = new AHRS(SerialPort.Port.kUSB1);
 
     private double FLTarget, FRTarget, BLTarget, BRTarget;
@@ -56,6 +68,8 @@ public class SwerveSubsystem extends SubsystemBase{
 
     private final SwerveDriveOdometry odometer;
     private final SwerveModulePosition[] states = new SwerveModulePosition[4];
+
+    private ChassisSpeeds getChassisSpeeds = new ChassisSpeeds();
 
     public SwerveSubsystem(){
         states[0] = frontLeft.getPosition();
@@ -74,7 +88,7 @@ public class SwerveSubsystem extends SubsystemBase{
 
         /*AutoBuilder.configureHolonomic(
             this::getPose, 
-            this::resetPose, 
+            this::resetOdometry, 
             this::getRobotRelativeSpeeds, 
             this::driveRobotRelative, 
             new HolonomicPathFollowerConfig(
@@ -114,8 +128,13 @@ public class SwerveSubsystem extends SubsystemBase{
     public Pose2d getPose(){
         return odometer.getPoseMeters();
     }
+    
     public void resetOdometry(Pose2d pose){
         odometer.resetPosition(getRotation2d(), states, pose); //States - potential issue?
+    }
+
+    public ChassisSpeeds getChassisSpeeds(){
+        return getChassisSpeeds;
     }
     public void periodic(){
         states[0] = frontLeft.getPosition();
@@ -153,16 +172,62 @@ public class SwerveSubsystem extends SubsystemBase{
         backLeft.setPercentSpeed(speed);
         backRight.setPercentSpeed(speed);
     }
-    public void setModuleStates(SwerveModuleState[] states){
+    public void setModuleStates(Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Boolean> fieldOrientedFunction){
+        SlewRateLimiter xLimiter = new SlewRateLimiter(DriveConstants.teleDriveMaxAccelerationUnitsPerSecond);
+        SlewRateLimiter yLimiter = new SlewRateLimiter(DriveConstants.teleDriveMaxAccelerationUnitsPerSecond);
+        SlewRateLimiter turningLimiter = new SlewRateLimiter(DriveConstants.teleDriveMaxAngularAccelerationUnitsPerSecond);
+
+        int tempNever = 500;
+
+        if(tempNever == 1000){
+            frontLeft.setDesiredState(lockedStates[0]);
+            frontRight.setDesiredState(lockedStates[1]);
+            backLeft.setDesiredState(lockedStates[2]);
+            backRight.setDesiredState(lockedStates[3]);
+            return;
+        }
+        else{
+          //Gets real time joystick input
+          double xSpeed = xSpdFunction.get();
+          double ySpeed = ySpdFunction.get();
+          double turningSpeed = turningSpdFunction.get();
+
+      
+          //Deadband
+          xSpeed = Math.abs(xSpeed) > OperatorConstants.deadband ? xSpeed : 0.0;
+          ySpeed = Math.abs(ySpeed) > OperatorConstants.deadband ? ySpeed : 0.0;
+          turningSpeed = Math.abs(turningSpeed) > OperatorConstants.deadband ? turningSpeed : 0.0;
+
+      
+          //Limits rate - if pushing drive stick too fast, robot will still accelerate slowly
+          //xSpeed = xLimiter.calculate(xSpeed);
+          //ySpeed = yLimiter.calculate(ySpeed);
+          //turningSpeed = turningLimiter.calculate(turningSpeed);
+
+          SmartDashboard.putNumber("Y Speed", ySpeed);
+      
+          getChassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
+          ChassisSpeeds chassisSpeeds;
+          if(fieldOrientedFunction.get()){
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, getRotation2d());
+          }
+          else{
+            chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
+          }
+      
+        SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+
         FLTarget = states[0].angle.getRadians();
         FRTarget = states[1].angle.getRadians();
         BLTarget = states[2].angle.getRadians();
         BRTarget = states[3].angle.getRadians();
 
-        SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveConstants.physicalMaxSpeedMetersPerSecond);
-        frontLeft.setDesiredState(states[0]);
-        frontRight.setDesiredState(states[1]);
-        backLeft.setDesiredState(states[2]);
-        backRight.setDesiredState(states[3]);
+        SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, DriveConstants.physicalMaxSpeedMetersPerSecond);
+        frontLeft.setDesiredState(moduleStates[0]);
+        frontRight.setDesiredState(moduleStates[1]);
+        backLeft.setDesiredState(moduleStates[2]);
+        backRight.setDesiredState(moduleStates[3]);
+        }
+        
     }
 }

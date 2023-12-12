@@ -84,18 +84,18 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     //Trajectory setting
     TrajectoryConfig config = new TrajectoryConfig(
-      10,
-      5)
+      2,
+      1)
       .setKinematics(DriveConstants.kDriveKinematics);
 
     //Generate trajectory
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0, 0, new Rotation2d(0)),
       List.of(
-        new Translation2d(1, 0),
-        new Translation2d(1, -1)
+      //  new Translation2d(0.5, 0)
+        new Translation2d(0.25, 0)
       ),
-      new Pose2d(2, -1, new Rotation2d(Math.PI)),
+      new Pose2d(0.5, 1, new Rotation2d(-0.00001)),
       config);
     
     //PID Controllers for trajectory following
@@ -105,21 +105,22 @@ public class RobotContainer {
     thetaPID.enableContinuousInput(-Math.PI, Math.PI);
 
     //Constructing command to follow trajectory
-    SwerveControllerCommand command = new SwerveControllerCommand(
-      trajectory,
-      swerveSubsystem::getPose,
-      DriveConstants.kDriveKinematics,
-      xPID,
-      yPID,
-      thetaPID,
-      swerveSubsystem::setModuleStates,
-      swerveSubsystem
-    );
+    // SwerveControllerCommand command = new SwerveControllerCommand(
+    //   trajectory,
+    //   swerveSubsystem::getPose,
+    //   DriveConstants.kDriveKinematics,
+    //   xPID,
+    //   yPID,
+    //   thetaPID,
+    //   swerveSubsystem::setModuleStates,
+    //   swerveSubsystem
+    // );
 
-    return new SequentialCommandGroup(
-      new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
-      command,
-      new InstantCommand(() -> swerveSubsystem.stopModules())
-    );
+    // return new SequentialCommandGroup(
+    //   new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
+    //   command,
+    //   new InstantCommand(() -> swerveSubsystem.stopModules())
+    // );
+    return null;
   }
 }
