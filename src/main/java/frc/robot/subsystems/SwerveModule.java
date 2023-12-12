@@ -4,12 +4,12 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotController;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.*;
 
 import com.ctre.phoenix.sensors.CANCoder;
 
@@ -63,6 +63,9 @@ public class SwerveModule {
     public double getDriveVelocity(){
         return driveEncoder.getVelocity();
     }
+    public double getDriveDistance(){
+        return getDrivePosition() * ModuleConstants.kDriveEncoderRot2Meter;
+    }
     public double getTurnPosition(){
         return turnEncoder.getPosition();
     }
@@ -89,6 +92,9 @@ public class SwerveModule {
     }
     public SwerveModuleState getState(){
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurnPosition()));
+    }
+    public SwerveModulePosition getPosition(){
+        return new SwerveModulePosition(getDriveDistance(), new Rotation2d(getTurnPosition()));
     }
     public void setDesiredState(SwerveModuleState state){
         /*if(Math.abs(state.speedMetersPerSecond) < 0.001){

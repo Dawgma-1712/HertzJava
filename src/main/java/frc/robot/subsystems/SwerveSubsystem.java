@@ -2,8 +2,10 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 //import edu.wpi.first.wpilibj.I2C;
@@ -52,7 +54,16 @@ public class SwerveSubsystem extends SubsystemBase{
 
     public boolean locked;
 
+    private final SwerveDriveOdometry odometer;
+    private final SwerveModulePosition[] states = new SwerveModulePosition[4];
+
     public SwerveSubsystem(){
+        states[0] = frontLeft.getPosition();
+        states[1] = frontRight.getPosition();
+        states[2] = backLeft.getPosition();
+        states[3] = backRight.getPosition();
+        odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, new Rotation2d(0), states);
+
         locked = false;
         new Thread(() -> {
             try{
@@ -61,7 +72,7 @@ public class SwerveSubsystem extends SubsystemBase{
             zeroHeading();
         }).start();
 
-        AutoBuilder.configureHolonomic(
+        /*AutoBuilder.configureHolonomic(
             this::getPose, 
             this::resetPose, 
             this::getRobotRelativeSpeeds, 
@@ -74,7 +85,7 @@ public class SwerveSubsystem extends SubsystemBase{
                 new ReplanningConfig()
             ), 
             this
-        );
+        );*/
     }
 
     public SwerveModule getFL(){
@@ -100,7 +111,19 @@ public class SwerveSubsystem extends SubsystemBase{
         return Rotation2d.fromDegrees(getHeading());
     }
 
+    public Pose2d getPose(){
+        return odometer.getPoseMeters();
+    }
+    public void resetOdometry(Pose2d pose){
+        odometer.resetPosition(getRotation2d(), states, pose); //States - potential issue?
+    }
     public void periodic(){
+        states[0] = frontLeft.getPosition();
+        states[1] = frontRight.getPosition();
+        states[2] = backLeft.getPosition();
+        states[3] = backRight.getPosition();
+        odometer.update(getRotation2d(), states);
+
         SmartDashboard.putNumber("Front Left Target Rotation", FLTarget);
         SmartDashboard.putNumber("Front Right Target Rotation", FRTarget);
         SmartDashboard.putNumber("Back Left Target Rotation", BLTarget);

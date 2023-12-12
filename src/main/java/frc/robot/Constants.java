@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.geometry.Translation2d;
 import java.util.Map;
 
@@ -45,6 +46,22 @@ public final class Constants {
     public static final double teleDriveMaxAccelerationUnitsPerSecond = 3;
     public static final double teleDriveMaxAngularAccelerationUnitsPerSecond = 3;    
   }
+
+  public static final class AutoConstants {
+    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxAngularSpeedRadiansPerSecond = 1;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+    public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
+    public static final double XController = 1.5;
+    public static final double YController = 1.5;
+    public static final double ThetaController = 3;
+
+    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = 
+            new TrapezoidProfile.Constraints(
+                    kMaxAngularSpeedRadiansPerSecond,
+                    kMaxAngularAccelerationRadiansPerSecondSquared);
+    }
+
   public static final class OperatorConstants{
     public static final Map<String, Double> armExtendPresets = Map.ofEntries(
       Map.entry("coneMid", 37.0),
