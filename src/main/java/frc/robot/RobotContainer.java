@@ -14,6 +14,7 @@ import frc.robot.subsystems.Claw;
 import java.util.List;
 
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -121,6 +122,6 @@ public class RobotContainer {
     //   command,
     //   new InstantCommand(() -> swerveSubsystem.stopModules())
     // );
-    return null;
+    return new PathPlannerAuto("Path1");
   }
 }
